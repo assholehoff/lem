@@ -19,6 +19,7 @@
        (or (lem-core:attribute-font attribute)
            (display:get-display-font display
                                      :type type
+                                     :bold-italic (and attribute (lem:attribute-bold-italic attribute))
                                      :bold (and attribute (lem:attribute-bold attribute))
                                      :italic (and attribute (lem:attribute-italic attribute))))
        c-string

@@ -5,6 +5,7 @@
   (:export :default-font-size
            :font
            :font-latin-normal-font
+           :font-latin-bold-italic-font
            :font-latin-bold-font
            :font-latin-italic-font
            :font-cjk-normal-font
@@ -30,6 +31,7 @@
 (defstruct (font-config (:constructor %make-font-config))
   size
   latin-normal-file
+  latin-bold-italic-file
   latin-bold-file
   latin-italic-file
   cjk-normal-file
@@ -39,6 +41,7 @@
 
 (defstruct font
   latin-normal-font
+  latin-bold-italic-font
   latin-bold-font
   latin-italic-font
   cjk-normal-font
@@ -54,6 +57,7 @@
 
 (defun make-font-config (&key (size (lem:config :sdl2-font-size *default-font-size*))
                               latin-normal-file
+                              latin-bold-italic-file
                               latin-bold-file
                               latin-italic-file
                               cjk-normal-file
@@ -66,6 +70,10 @@
                           (lem:config
                            :sdl2-normal-font
                            (get-resource-pathname "resources/fonts/VictorMonoNF-Regular.ttf")))
+   :latin-bold-italic-file (or latin-bold-italic-file
+                               (lem:config
+                                :sdl2-bold-italic-font
+                                (get-resource-pathname "resources/fonts/VictorMonoNF-BoldItalic.ttf")))
    :latin-bold-file (or latin-bold-file
                         (lem:config
                          :sdl2-bold-font
@@ -95,10 +103,12 @@
                                (font-config-size old))
                      :latin-normal-file (or (font-config-latin-normal-file new)
                                             (font-config-latin-normal-file old))
+                     :latin-bold-italic-file (or (font-config-latin-bold-italic-file new)
+                                                 (font-config-latin-bold-italic-file old))
                      :latin-bold-file (or (font-config-latin-bold-file new)
                                           (font-config-latin-bold-file old))
                      :latin-italic-file (or (font-config-latin-italic-file new)
-                                          (font-config-latin-italic-file old))
+                                            (font-config-latin-italic-file old))
                      :cjk-normal-file (or (font-config-cjk-normal-file new)
                                           (font-config-cjk-normal-file old))
                      :cjk-bold-file (or (font-config-cjk-bold-file new)
@@ -123,10 +133,12 @@
   (let* ((font-config (or font-config (make-font-config)))
          (latin-normal-font (sdl2-ttf:open-font (font-config-latin-normal-file font-config)
                                                 (font-config-size font-config)))
+         (latin-bold-italic-font (sdl2-ttf:open-font (font-config-latin-bold-italic-file font-config)
+                                                     (font-config-size font-config)))
          (latin-bold-font (sdl2-ttf:open-font (font-config-latin-bold-file font-config)
                                               (font-config-size font-config)))
          (latin-italic-font (sdl2-ttf:open-font (font-config-latin-italic-file font-config)
-                                              (font-config-size font-config)))
+                                                (font-config-size font-config)))
          (cjk-normal-font (sdl2-ttf:open-font (font-config-cjk-normal-file font-config)
                                               (font-config-size font-config)))
          (cjk-bold-font (sdl2-ttf:open-font (font-config-cjk-bold-file font-config)
@@ -138,6 +150,7 @@
     (destructuring-bind (char-width char-height)
         (get-character-size latin-normal-font)
       (make-font :latin-normal-font latin-normal-font
+                 :latin-bold-italic-font latin-bold-italic-font
                  :latin-bold-font latin-bold-font
                  :latin-italic-font latin-italic-font
                  :cjk-normal-font cjk-normal-font
@@ -149,6 +162,7 @@
 
 (defun close-font (font)
   (sdl2-ttf:close-font (font-latin-normal-font font))
+  (sdl2-ttf:close-font (font-latin-bold-italic-font font))
   (sdl2-ttf:close-font (font-latin-bold-font font))
   (sdl2-ttf:close-font (font-latin-italic-font font))
   (sdl2-ttf:close-font (font-cjk-normal-font font))
