@@ -6,6 +6,7 @@
            :font
            :font-latin-normal-font
            :font-latin-bold-font
+           :font-latin-italic-font
            :font-cjk-normal-font
            :font-cjk-bold-font
            :font-emoji-font
@@ -22,7 +23,7 @@
            :get-font-list))
 (in-package :lem-sdl2/font)
 
-(defparameter *default-font-size* 15)
+(defparameter *default-font-size* 16)
 
 (defun default-font-size () *default-font-size*)
 
@@ -30,6 +31,7 @@
   size
   latin-normal-file
   latin-bold-file
+  latin-italic-file
   cjk-normal-file
   cjk-bold-file
   emoji-file
@@ -38,6 +40,7 @@
 (defstruct font
   latin-normal-font
   latin-bold-font
+  latin-italic-font
   cjk-normal-font
   cjk-bold-font
   emoji-font
@@ -52,6 +55,7 @@
 (defun make-font-config (&key (size (lem:config :sdl2-font-size *default-font-size*))
                               latin-normal-file
                               latin-bold-file
+                              latin-italic-file
                               cjk-normal-file
                               cjk-bold-file
                               emoji-file
@@ -61,11 +65,16 @@
    :latin-normal-file (or latin-normal-file
                           (lem:config
                            :sdl2-normal-font
-                           (get-resource-pathname "resources/fonts/NotoSansMono-Regular.ttf")))
+                           (get-resource-pathname "resources/fonts/VictorMonoNF-Regular.ttf")))
    :latin-bold-file (or latin-bold-file
                         (lem:config
                          :sdl2-bold-font
-                         (get-resource-pathname "resources/fonts/NotoSansMono-Bold.ttf")))
+                         (get-resource-pathname "resources/fonts/VictorMonoNF-Bold.ttf")))
+   :latin-italic-file (or latin-italic-file
+                          (lem:config
+                           :sdl2-italic-font
+                           (get-resource-pathname "resources/fonts/VictorMonoNF-Italic.ttf")))
+   ;; CJK is Chinese, Japanese and Korean
    :cjk-normal-file (or cjk-normal-file
                         (lem:config
                          :sdl2-cjk-normal-font
@@ -88,6 +97,8 @@
                                             (font-config-latin-normal-file old))
                      :latin-bold-file (or (font-config-latin-bold-file new)
                                           (font-config-latin-bold-file old))
+                     :latin-italic-file (or (font-config-latin-italic-file new)
+                                          (font-config-latin-italic-file old))
                      :cjk-normal-file (or (font-config-cjk-normal-file new)
                                           (font-config-cjk-normal-file old))
                      :cjk-bold-file (or (font-config-cjk-bold-file new)
@@ -114,6 +125,8 @@
                                                 (font-config-size font-config)))
          (latin-bold-font (sdl2-ttf:open-font (font-config-latin-bold-file font-config)
                                               (font-config-size font-config)))
+         (latin-italic-font (sdl2-ttf:open-font (font-config-latin-italic-file font-config)
+                                              (font-config-size font-config)))
          (cjk-normal-font (sdl2-ttf:open-font (font-config-cjk-normal-file font-config)
                                               (font-config-size font-config)))
          (cjk-bold-font (sdl2-ttf:open-font (font-config-cjk-bold-file font-config)
@@ -126,6 +139,7 @@
         (get-character-size latin-normal-font)
       (make-font :latin-normal-font latin-normal-font
                  :latin-bold-font latin-bold-font
+                 :latin-italic-font latin-italic-font
                  :cjk-normal-font cjk-normal-font
                  :cjk-bold-font cjk-bold-font
                  :emoji-font emoji-font
@@ -136,6 +150,7 @@
 (defun close-font (font)
   (sdl2-ttf:close-font (font-latin-normal-font font))
   (sdl2-ttf:close-font (font-latin-bold-font font))
+  (sdl2-ttf:close-font (font-latin-italic-font font))
   (sdl2-ttf:close-font (font-cjk-normal-font font))
   (sdl2-ttf:close-font (font-cjk-bold-font font))
   (sdl2-ttf:close-font (font-emoji-font font))

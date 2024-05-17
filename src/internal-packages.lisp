@@ -121,11 +121,13 @@
    :set-attribute-background
    :set-attribute-reverse
    :set-attribute-bold
+   :set-attribute-italic
    :set-attribute-underline
    :attribute-foreground
    :attribute-background
    :attribute-reverse
    :attribute-bold
+   :attribute-italic
    :attribute-underline
    :get-attribute-cache
    :define-attribute

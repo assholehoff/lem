@@ -15,6 +15,9 @@
    (bold
     :initarg :bold
     :reader attribute-bold)
+   (italic
+    :initarg :italic
+    :reader attribute-italic)
    (underline
     :initarg :underline
     :reader attribute-underline)
@@ -28,11 +31,12 @@
 
 (defmethod print-object ((attribute attribute) stream)
   (print-unreadable-object (attribute stream :type t :identity t)
-    (format stream "(~A ~A)~:[~; reverse~]~:[~; bold~]~:[~; underline~]"
+    (format stream "(~A ~A)~:[~; reverse~]~:[~; bold~]~:[~; italic~]~:[~; underline~]"
             (or (attribute-foreground attribute) "")
             (or (attribute-background attribute) "")
             (attribute-reverse attribute)
             (attribute-bold attribute)
+            (attribute-italic attribute)
             (attribute-underline attribute))))
 
 (defun attribute-p (x)
@@ -44,12 +48,13 @@
 (defun (setf attribute-value) (value attribute key)
   (setf (getf (attribute-plist attribute) key) value))
 
-(defun make-attribute (&key foreground background reverse bold underline plist)
+(defun make-attribute (&key foreground background reverse bold italic underline plist)
   (make-instance 'attribute
                  :foreground (or (maybe-base-color foreground) nil)
                  :background (or (maybe-base-color background) nil)
                  :reverse reverse
                  :bold bold
+                 :italic italic
                  :underline (or (maybe-base-color underline) underline)
                  :plist plist))
 
@@ -71,6 +76,8 @@
                                   (attribute-background under))
                   :bold (or (attribute-bold over)
                               (attribute-bold under))
+                  :italic (or (attribute-italic over)
+                            (attribute-italic under))
                   :reverse (or (attribute-reverse over)
                                  (attribute-reverse under))
                   :underline (or (attribute-underline over)
@@ -91,12 +98,14 @@
                     (attribute-reverse attribute2))
              (equal (attribute-bold attribute1)
                     (attribute-bold attribute2))
+             (equal (attribute-italic attribute1)
+                    (attribute-italic attribute2))
              (equal (attribute-underline attribute1)
                     (attribute-underline attribute2))))))
 
 (defun set-attribute (attribute &key (foreground nil foregroundp)
                                      (background nil backgroundp)
-                                     reverse bold underline)
+                                     reverse bold italic underline)
   (let ((attribute (ensure-attribute attribute t)))
     (setf (attribute-cache attribute) nil)
     (when foregroundp
@@ -105,6 +114,7 @@
       (setf (slot-value attribute 'background) background))
     (setf (slot-value attribute 'reverse) reverse)
     (setf (slot-value attribute 'bold) bold)
+    (setf (slot-value attribute 'italic) italic)
     (setf (slot-value attribute 'underline) underline)))
 
 (macrolet ((def (setter slot-name)
@@ -116,6 +126,7 @@
   (def set-attribute-background background)
   (def set-attribute-reverse reverse)
   (def set-attribute-bold bold)
+  (def set-attribute-italic italic)
   (def set-attribute-underline underline))
 
 (defun clear-all-attribute-cache ()
@@ -192,7 +203,7 @@
   (t :bold t :background "#404040" :foreground "white"))
 
 (define-attribute modeline-inactive
-  (t :bold t :background "#212121" :foreground "#707070"))
+  (t :italic t :background "#212121" :foreground "#707070"))
 
 (define-attribute truncate-attribute)
 

@@ -90,6 +90,9 @@
 (defmethod display-latin-bold-font ((display display))
   (font:font-latin-bold-font (display-font display)))
 
+(defmethod display-latin-italic-font ((display display))
+  (font:font-latin-italic-font (display-font display)))
+
 (defmethod display-cjk-normal-font ((display display))
   (font:font-cjk-normal-font (display-font display)))
 
@@ -128,7 +131,7 @@
   (set-render-color display (display-background-color display))
   (sdl2:render-fill-rect (display-renderer display) nil))
 
-(defmethod get-display-font ((display display) &key type bold character)
+(defmethod get-display-font ((display display) &key type bold italic character)
   (check-type type lem-core::char-type)
   (cond ((eq type :control)
          (display-latin-font display))
@@ -144,6 +147,10 @@
         (bold
          (if (eq type :latin)
              (display-latin-bold-font display)
+             (display-cjk-bold-font display)))
+        (italic
+         (if (eq type :latin)
+             (display-latin-italic-font display)
              (display-cjk-bold-font display)))
         (t
          (if (eq type :latin)
