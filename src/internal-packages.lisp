@@ -406,7 +406,13 @@
    :change-global-mode-keymap
    :enable-minor-mode
    :disable-minor-mode
-   :current-global-mode)
+   :current-global-mode
+   :get-syntax-table-by-mode-name
+   :set-region-major-mode
+   :clear-region-major-mode
+   :major-mode-at-point
+   :current-major-mode-at-point
+   :with-major-mode)
   ;; keymap.lisp
   (:export
    :*keymaps*
@@ -577,7 +583,11 @@
   (:export
    :color-theme-names
    :define-color-theme
-   :load-theme)
+   :load-theme
+   :current-theme
+   :find-color-theme
+   :color-theme
+   :get-color-theme-color)
   ;; region.lisp
   (:export
    :check-marked-using-global-mode

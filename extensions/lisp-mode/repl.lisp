@@ -268,7 +268,7 @@
   (insert-string (current-point) string)
   (lem/listener-mode:listener-return))
 
-(define-command start-lisp-repl (&optional (use-this-window nil)) ("P")
+(define-command start-lisp-repl (&optional (use-this-window nil)) (:universal-nil)
   (check-connection)
   (flet ((switch (buffer split-window-p)
            (if split-window-p
@@ -305,6 +305,11 @@
             (let ((point (copy-point (buffer-point buffer) :left-inserting)))
               (buffer-start point)))))
 
+(defun see-repl-writing (buffer)
+  (when (end-buffer-p (buffer-point buffer))
+    (dolist (window (get-buffer-windows buffer))
+      (window-see window))))
+
 (defun call-with-repl-point (function)
   (let* ((buffer (ensure-repl-buffer-exist))
          (point (repl-buffer-write-point buffer)))
@@ -314,6 +319,8 @@
            (when (point<= (lem/listener-mode:input-start-point buffer) point)
              (move-point point (lem/listener-mode:input-start-point buffer))
              (previous-single-property-change point :field))))
+    (unless (eq (current-buffer) buffer)
+      (see-repl-writing buffer))
     (with-buffer-read-only buffer nil
       (let ((*inhibit-read-only* t))
         (funcall function point)))))
@@ -484,7 +491,7 @@
                  :history-symbol 'mh-lisp-repl-shortcuts)
                 *lisp-repl-shortcuts* :test #'equal))))
 
-(define-command lisp-repl-shortcut (n) ("p")
+(define-command lisp-repl-shortcut (n) (:universal)
   (with-point ((point (current-point)))
     (if (point>= (lem/listener-mode:input-start-point (current-buffer)) point)
         (let ((fun (prompt-for-shortcuts)))

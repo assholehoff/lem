@@ -21,6 +21,9 @@
 (defun (setf current-connection) (connection)
   (setf *connection* connection))
 
+(set-syntax-parser lem-lisp-syntax:*syntax-table*
+                   (make-tmlanguage-lisp))
+
 (define-major-mode lisp-mode language-mode
     (:name "Lisp"
      :description "Contains necessary functions to handle lisp code."
@@ -66,8 +69,6 @@
                        (lem/detective:make-capture-regex
                         :regex "^\\(deftest "
                         :function #'lem-lisp-mode/detective:capture-reference)))
-  (set-syntax-parser lem-lisp-syntax:*syntax-table*
-                     (make-tmlanguage-lisp))
   (unless (connected-p) (self-connect))
 
   (setf (buffer-context-menu (current-buffer))
@@ -246,7 +247,9 @@
 (defun buffer-package (buffer &optional default)
   (let ((package-name (buffer-value buffer "package" default)))
     (typecase package-name
-      (null default)
+      (null (alexandria:if-let (package-name (scan-current-package (buffer-point buffer)))
+              (string-upcase package-name)
+              default))
       ((or symbol string)
        (string-upcase package-name))
       ((cons (or symbol string))
@@ -710,7 +713,7 @@
         (lisp-eval-async `(micros:compile-file-for-emacs ,(convert-local-to-remote-file file) t)
                          #'compilation-finished))))
 
-(define-command lisp-compile-region (start end) ("r")
+(define-command lisp-compile-region (start end) (:region)
   (check-connection)
   (let ((string (points-to-string start end))
         (position `((:position ,(position-at-point start))
@@ -1123,7 +1126,7 @@
                    (stop-loading-spinner spinner)))
           (setf timer (start-timer (make-timer #'interval) 500 :repeat t)))))))
 
-(define-command slime (&optional ask-command) ("P")
+(define-command slime (&optional ask-command) (:universal-nil)
   (let ((command (if ask-command
                      (prompt-for-lisp-command)
                      (lem-lisp-mode/implementation:default-command))))

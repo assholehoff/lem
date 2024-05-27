@@ -6,26 +6,11 @@
            :markdown-mode))
 (in-package :lem-markdown-mode)
 
-(defun make-tmlanguage-markdown ()
-  (let* ((patterns (make-tm-patterns
-                    (make-tm-match "^#.*$" :name 'syntax-constant-attribute)
-                    (make-tm-match "^>.*$" :name 'syntax-string-attribute)
-                    (make-tm-region '(:sequence "```")
-                                    '(:sequence "```")
-                                    :name 'syntax-string-attribute
-                                    :patterns (make-tm-patterns (make-tm-match "\\\\.")))
-                    (make-tm-match "([-*_] ?)([-*_] ?)([-*_] ?)+"
-                                   :name 'syntax-comment-attribute)
-                    (make-tm-match "^ *([*+\\-]|([0-9]+\\.)) +"
-                                   :name 'syntax-keyword-attribute))))
-    (make-tmlanguage :patterns patterns)))
-
 (defvar *markdown-syntax-table*
   (let ((table (make-syntax-table
                 :space-chars '(#\space #\tab #\newline)
-                :string-quote-chars '(#\`)))
-        (tmlanguage (make-tmlanguage-markdown)))
-    (set-syntax-parser table tmlanguage)
+                :string-quote-chars '(#\`))))
+    (set-syntax-parser table (lem-markdown-mode/syntax-parser:make-syntax-parser))
     table))
 
 (define-major-mode markdown-mode language-mode
@@ -45,6 +30,10 @@
     (let ((tab-width (variable-value 'tab-width :default point))
           (column (point-column point)))
       (+ column (- tab-width (rem column tab-width))))))
+
+(defmethod execute :around ((mode markdown-mode) command argument)
+  (with-major-mode (current-major-mode-at-point (current-point))
+    (call-next-method)))
 
 (define-command markdown-insert-link () ()
   (let ((url (prompt-for-string "URL: "
