@@ -211,10 +211,10 @@
   (:dark :foreground nil :background "blue"))
 
 (define-attribute modeline
-  (t :bold t :background "#404040" :foreground "white"))
+  (t :background "#404040" :foreground "white"))
 
 (define-attribute modeline-inactive
-  (t :bold-italic t :background "#212121" :foreground "#707070"))
+  (t :background "#212121" :foreground "#707070"))
 
 (define-attribute truncate-attribute)
 
@@ -254,7 +254,6 @@
 
 (define-attribute syntax-builtin-attribute
   (t :foreground "#FF87FF"))
-
 
 (defun attribute-value* (attribute key)
   (let ((attribute (ensure-attribute attribute nil)))
