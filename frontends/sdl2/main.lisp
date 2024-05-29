@@ -132,8 +132,8 @@
     (:windowevent (:event event)
      (on-windowevent display event))))
 
-(defun init-application-icon (window)
-  (let ((image (sdl2-image:load-image (get-resource-pathname "resources/icon.png"))))
+(defun init-application-icon (window &optional (icon "resources/icon-dark.png"))
+  (let ((image (sdl2-image:load-image (get-resource-pathname icon))))
     (sdl2-ffi.functions:sdl-set-window-icon window image)
     (sdl2:free-surface image)))
 
