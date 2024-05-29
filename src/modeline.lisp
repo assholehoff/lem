@@ -10,34 +10,34 @@
   "")
 
 (define-attribute modeline-name-attribute
-  (t :foreground "orange"))
+  (t :bold t :foreground "orange"))
 
 (define-attribute inactive-modeline-name-attribute
-  (t :foreground "#996300"))
+  (t :bold-italic t :foreground "#996300"))
 
 (define-attribute modeline-major-mode-attribute
-  (t :foreground "#85b8ff"))
+  (t :bold t :foreground "#85b8ff"))
 
 (define-attribute inactive-modeline-major-mode-attribute
-  (t :foreground "#325587"))
+  (t :bold-italic t :foreground "#325587"))
 
 (define-attribute modeline-minor-modes-attribute
-  (t :foreground "#FFFFFF"))
+  (t :bold t :italic t :foreground "#FFFFFF"))
 
 (define-attribute inactive-modeline-minor-modes-attribute
-  (t :foreground "#808080"))
+  (t :italic t :foreground "#808080"))
 
 (define-attribute modeline-position-attribute
-  (t :foreground "#FAFAFA" :background "#202020"))
+  (t :bold t :foreground "#FAFAFA" :background "#202020"))
 
 (define-attribute inactive-modeline-position-attribute
-  (t :foreground "#888888" :background "#202020"))
+  (t :bold-italic t :foreground "#888888" :background "#202020"))
 
 (define-attribute modeline-posline-attribute
-  (t :foreground "black" :background "#A0A0A0"))
+  (t :bold t :foreground "black" :background "#A0A0A0"))
 
 (define-attribute inactive-modeline-posline-attribute
-  (t :foreground "black" :background "#505050"))
+  (t :bold-italic t :foreground "black" :background "#505050"))
 
 (defvar *modeline-status-list* nil)
 
