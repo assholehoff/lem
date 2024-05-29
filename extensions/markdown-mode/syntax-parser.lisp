@@ -12,7 +12,14 @@
   (make-instance 'syntax-parser))
 
 (defmethod lem/buffer/internal::%syntax-scan-region ((parser syntax-parser) start end)
-  (scan-region start end))
+  ;; To simplify the implementation of scanning for syntax consisting of multiple lines,
+  ;; always scan the entire buffer.
+  (with-point ((start start)
+               (end end))
+    (buffer-start start)
+    (buffer-end end)
+    (remove-text-property start end :attribute)
+    (scan-region start end)))
 
 (defun put-line-attribute (point attribute)
   (with-point ((start point)
@@ -30,7 +37,7 @@
 (defun scan-code-block (point end)
   (let* ((groups (nth-value 1 (looking-at point "^```(.*)")))
          (language-name (and groups (elt groups 0)))
-         (mode (find-mode language-name))
+         (mode (lem-markdown-mode/languages:find-mode-by-language-name language-name))
          (syntax-table (when mode (mode-syntax-table mode))))
     (line-offset point 1)
     (with-point ((start point))
