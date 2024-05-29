@@ -147,12 +147,6 @@
          (display-emoji-font display))
         ((eq type :braille)
          (display-braille-font display))
-        ; ((or (bold-italic)
-        ;      (and (bold)
-        ;           (italic)))
-        ;  (if (eq type :latin)
-        ;      (display-latin-bold-italic-font display)
-        ;      (display-cjk-bold-font display)))
         (bold-italic 
          (if (eq type :latin)
              (display-latin-bold-italic-font display)
