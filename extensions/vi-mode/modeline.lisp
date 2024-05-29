@@ -20,19 +20,19 @@
 (defvar *modeline-element*)
 
 (define-attribute state-modeline-white
-  (t :foreground "white" :reverse t))
+  (t :bold t :foreground "white" :reverse t))
 
 (define-attribute state-modeline-yellow
-  (t :foreground "yellow" :reverse t))
+  (t :bold t :foreground "yellow" :reverse t))
 
 (define-attribute state-modeline-green
-  (t :foreground "#003300" :reverse t))
+  (t :bold t :foreground "#003300" :reverse t))
 
 (define-attribute state-modeline-aqua
-  (t :foreground "#33CCFF" :reverse t))
+  (t :bold t :foreground "#33CCFF" :reverse t))
 
 (define-attribute state-modeline-orange
-  (t :foreground "orange" :reverse t))
+  (t :bold t :foreground "orange" :reverse t))
 
 (defstruct (vi-modeline-element (:conc-name element-))
   name
