@@ -24,7 +24,7 @@
 
 (defun get-version-string ()
   "Return the version number of this version of Lem."
-  (format nil "lem ~A~@[-~A~] (~A-~A)"
+  (format nil "lem ~A-italic~@[-~A~] (~A-~A)"
           (asdf:component-version (asdf:find-system :lem))
           *git-revision*
           (machine-type)

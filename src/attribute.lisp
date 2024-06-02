@@ -12,9 +12,6 @@
    (reverse
     :initarg :reverse
     :reader attribute-reverse)
-   (bold-italic
-    :initarg :bold-italic
-    :reader attribute-bold-italic)
    (bold
     :initarg :bold
     :reader attribute-bold)
@@ -34,11 +31,10 @@
 
 (defmethod print-object ((attribute attribute) stream)
   (print-unreadable-object (attribute stream :type t :identity t)
-    (format stream "(~A ~A)~:[~; reverse~]~:[~; bold-italic~]~:[~; bold~]~:[~; italic~]~:[~; underline~]"
+    (format stream "(~A ~A)~:[~; reverse~]~:[~; bold~]~:[~; italic~]~:[~; underline~]"
             (or (attribute-foreground attribute) "")
             (or (attribute-background attribute) "")
             (attribute-reverse attribute)
-            (attribute-bold-italic attribute)
             (attribute-bold attribute)
             (attribute-italic attribute)
             (attribute-underline attribute))))
@@ -52,12 +48,11 @@
 (defun (setf attribute-value) (value attribute key)
   (setf (getf (attribute-plist attribute) key) value))
 
-(defun make-attribute (&key foreground background reverse bold-italic bold italic underline plist)
+(defun make-attribute (&key foreground background reverse bold italic underline plist)
   (make-instance 'attribute
                  :foreground (or (maybe-base-color foreground) nil)
                  :background (or (maybe-base-color background) nil)
                  :reverse reverse
-                 :bold-italic bold-italic
                  :bold bold
                  :italic italic
                  :underline (or (maybe-base-color underline) underline)
@@ -79,8 +74,6 @@
                                   (attribute-foreground under))
                   :background (or (attribute-background over)
                                   (attribute-background under))
-                  :bold-italic (or (attribute-bold-italic over)
-                                   (attribute-bold-italic under))
                   :bold (or (attribute-bold over)
                               (attribute-bold under))
                   :italic (or (attribute-italic over)
@@ -103,8 +96,6 @@
                     (attribute-background attribute2))
              (equal (attribute-reverse attribute1)
                     (attribute-reverse attribute2))
-             (equal (attribute-bold-italic attribute1)
-                    (attribute-bold-italic attribute2))
              (equal (attribute-bold attribute1)
                     (attribute-bold attribute2))
              (equal (attribute-italic attribute1)
@@ -114,7 +105,7 @@
 
 (defun set-attribute (attribute &key (foreground nil foregroundp)
                                      (background nil backgroundp)
-                                     reverse bold-italic bold italic underline)
+                                     reverse bold italic underline)
   (let ((attribute (ensure-attribute attribute t)))
     (setf (attribute-cache attribute) nil)
     (when foregroundp
@@ -122,7 +113,6 @@
     (when backgroundp
       (setf (slot-value attribute 'background) background))
     (setf (slot-value attribute 'reverse) reverse)
-    (setf (slot-value attribute 'bold-italic) bold-italic)
     (setf (slot-value attribute 'bold) bold)
     (setf (slot-value attribute 'italic) italic)
     (setf (slot-value attribute 'underline) underline)))
@@ -135,7 +125,6 @@
   (def set-attribute-foreground foreground)
   (def set-attribute-background background)
   (def set-attribute-reverse reverse)
-  (def set-attribute-bold-italic bold-italic)
   (def set-attribute-bold bold)
   (def set-attribute-italic italic)
   (def set-attribute-underline underline))
@@ -229,16 +218,16 @@
   (:dark :foreground "light salmon"))
 
 (define-attribute syntax-comment-attribute
-  (:light :foreground "#FFFEFE")
-  (:dark :foreground "chocolate1"))
+  (:light :italic t :foreground "#FFFEFE")
+  (:dark :italic t :foreground "chocolate1"))
 
 (define-attribute syntax-keyword-attribute
-  (:light :foreground "purple")
-  (:dark :foreground "cyan1"))
+  (:light :bold t :foreground "purple")
+  (:dark :bold t :foreground "cyan1"))
 
 (define-attribute syntax-constant-attribute
-  (:light :foreground "#ff00ff")
-  (:dark :foreground "LightSteelBlue"))
+  (:light :italic t :foreground "#ff00ff")
+  (:dark :italic t :foreground "LightSteelBlue"))
 
 (define-attribute syntax-function-name-attribute
   (:light :foreground "#0000ff")
