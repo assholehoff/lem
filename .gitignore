@@ -6,6 +6,8 @@ package-lock.json
 roswell/lem-ncurses
 *~
 
+*.diff
+*.patch
 contrib/Makefile.am
 Makefile.in
 compile

@@ -12,6 +12,12 @@
    (reverse
     :initarg :reverse
     :reader attribute-reverse)
+   (font
+    :initarg :font
+    :reader attribute-font)
+   (weight
+    :initarg :weight
+    :reader attribute-weight)
    (bold
     :initarg :bold
     :reader attribute-bold)
@@ -34,13 +40,12 @@
 
 (defmethod print-object ((attribute attribute) stream)
   (print-unreadable-object (attribute stream :type t :identity t)
-    (format stream "(~A ~A)~:[~; reverse~]~:[~; bold~]~:[~; italic~]~:[~; oblique~]~:[~; underline~]"
+    (format stream "(~A ~A)~:[~; reverse~]~:[~; bold~]~:[~; italic~]~:[~; underline~]"
             (or (attribute-foreground attribute) "")
             (or (attribute-background attribute) "")
             (attribute-reverse attribute)
             (attribute-bold attribute)
             (attribute-italic attribute)
-            (attribute-oblique attribute)
             (attribute-underline attribute))))
 
 (defun attribute-p (x)
@@ -57,6 +62,8 @@
                  :foreground (or (maybe-base-color foreground) nil)
                  :background (or (maybe-base-color background) nil)
                  :reverse reverse
+                 :font font
+                 :weight weight
                  :bold bold
                  :italic italic
                  :oblique oblique

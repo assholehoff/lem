@@ -108,8 +108,8 @@
   (setf (variable-value 'tabbar :global)
         (not (variable-value 'tabbar :global))))
 
-;(define-key *global-keymap* "Shift-PageDown" 'tabbar-next)
-;(define-key *global-keymap* "Shift-PageUp" 'tabbar-prev)
+(define-key *global-keymap* "Shift-PageDown" 'tabbar-next)
+(define-key *global-keymap* "Shift-PageUp" 'tabbar-prev)
 
 (define-command tabbar-next (n) (:universal)
   (let ((p (buffer-point (tabbar-buffer *tabbar*))))

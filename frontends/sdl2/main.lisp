@@ -16,7 +16,7 @@
            :current-renderer))
 (in-package :lem-sdl2)
 
-(defconstant +display-width+ 100)
+(defconstant +display-width+ 200)
 (defconstant +display-height+ 40)
 
 (defun on-mouse-button-down (display button x y clicks)

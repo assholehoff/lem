@@ -19,10 +19,10 @@
   (t :bold t :foreground "#85b8ff"))
 
 (define-attribute inactive-modeline-major-mode-attribute
-  (t :italic t :foreground "#325587"))
+  (t :foreground "#325587"))
 
 (define-attribute modeline-minor-modes-attribute
-  (t :bold t :italic t :foreground "#FFFFFF"))
+  (t :italic t :foreground "#FFFFFF"))
 
 (define-attribute inactive-modeline-minor-modes-attribute
   (t :italic t :foreground "#808080"))
@@ -31,13 +31,13 @@
   (t :bold t :foreground "#FAFAFA" :background "#202020"))
 
 (define-attribute inactive-modeline-position-attribute
-  (t :bold t :italic t :foreground "#888888" :background "#202020"))
+  (t :foreground "#888888" :background "#202020"))
 
 (define-attribute modeline-posline-attribute
   (t :bold t :foreground "black" :background "#A0A0A0"))
 
 (define-attribute inactive-modeline-posline-attribute
-  (t :bold t :italic t :foreground "black" :background "#505050"))
+  (t :foreground "black" :background "#505050"))
 
 (defvar *modeline-status-list* nil)
 

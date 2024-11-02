@@ -20,7 +20,8 @@
            (display:get-display-font display
                                      :type type
                                      :bold (and attribute (lem:attribute-bold attribute))
-                                     :italic (and attribute (lem:attribute-italic attribute))))
+                                     :italic (and attribute (lem:attribute-italic attribute))
+                                     :oblique (and attribute (lem:attribute-oblique attribute))))
        c-string
        (lem:color-red foreground)
        (lem:color-green foreground)

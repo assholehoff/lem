@@ -87,14 +87,20 @@
 (defmethod display-latin-font ((display display))
   (font:font-latin-normal-font (display-font display)))
 
-(defmethod display-latin-bold-italic-font ((display display))
-  (font:font-latin-bold-italic-font (display-font display)))
-
 (defmethod display-latin-bold-font ((display display))
   (font:font-latin-bold-font (display-font display)))
 
 (defmethod display-latin-italic-font ((display display))
   (font:font-latin-italic-font (display-font display)))
+
+(defmethod display-latin-oblique-font ((display display))
+  (font:font-latin-oblique-font (display-font display)))
+
+(defmethod display-latin-bold-italic-font ((display display))
+  (font:font-latin-bold-italic-font (display-font display)))
+
+(defmethod display-latin-bold-oblique-font ((display display))
+  (font:font-latin-bold-oblique-font (display-font display)))
 
 (defmethod display-cjk-normal-font ((display display))
   (font:font-cjk-normal-font (display-font display)))
@@ -134,7 +140,7 @@
   (set-render-color display (display-background-color display))
   (sdl2:render-fill-rect (display-renderer display) nil))
 
-(defmethod get-display-font ((display display) &key type bold italic character)
+(defmethod get-display-font ((display display) &key type bold italic oblique character)
   (check-type type lem-core::char-type)
   (cond ((eq type :control)
          (display-latin-font display))
@@ -148,16 +154,25 @@
         ((eq type :braille)
          (display-braille-font display))
         (bold
-         (if italic
-             (if (eq type :latin)
-                 (display-latin-bold-italic-font display)
-                 (display-cjk-bold-font display))
-             (if (eq type :latin)
-                 (display-latin-bold-font display)
-                 (display-cjk-bold-font display))))
+         (cond (italic
+                (if (eq type :latin)
+                    (display-latin-bold-italic-font display)
+                    (display-cjk-bold-font)))
+               (oblique
+                (if (eq type :latin)
+                    (display-latin-bold-oblique-font display)
+                    (display-cjk-bold-font)))
+               (t
+                (if (eq type :latin)
+                    (display-latin-bold-font display)
+                    (display-cjk-bold-font display)))))
         (italic
          (if (eq type :latin)
              (display-latin-italic-font display)
+             (display-cjk-bold-font display)))
+        (oblique
+         (if (eq type :latin)
+             (display-latin-oblique-font display)
              (display-cjk-bold-font display)))
         (t
          (if (eq type :latin)
